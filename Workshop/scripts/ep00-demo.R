@@ -2,6 +2,7 @@
 # A very quick demonstation of the sorts of things your can do with R
 #
 
+# If a line starts with a hash is just commentary - R won't try to read it as code
 
 # Load the GGPLOT2 library
 library(ggplot2)
