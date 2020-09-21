@@ -14,7 +14,9 @@
 3 + 5
 12 / 7
 
-# other operators
+# Command+Enter = run the command (without clicking the button)
+
+# other operators in built in the system)
 #
 # - * / ** ^ ( )
 
@@ -25,14 +27,15 @@
 # What does: 11 + 1 / 6  evaluate to ?
 
 # Solution:
-
+11+(1/6)
 
 # Calculate 10 plus 2 all divided by 3 and then squared
 
 # Solution:
+((10+2)/3)^2
 
 
-
+# <- alt + minus sign is the shortcut to get this store function below
 
 # Storing values
 a <- 3              # assign the number 3 to OBJECT (variable) called "a"
@@ -42,6 +45,11 @@ a                   # so what's the value of OBJECT "a"
 b                   # ... and what's b
 
 a + b               # we can add them together just like numbers
+
+a <- 8
+
+a+b
+
 
 # --------
 # Exercise
@@ -59,23 +67,36 @@ a + b               # we can add them together just like numbers
 #
 # Solution:
 
+# (a+b) <- c (I tried this and it didn't work)
+# 12 <- c  (I tried this and it didn't work)
+#because the one you're assigning a variable TO needs to be on the left
 
+c <- a + b
 
 # Logical operators
 #
 # == != < > >= <= !
 1 < 124
+1 == 4
 
 #
 # Sensible object names are sensible ...
-#
+# EG "Z" is not a helpful name for naming a variable
 date_of_birth <- 7
 z <- 19.5
 THEMOL <- 42
 camelCaseIsGenerallyNotRecommended <- "Unless you follow Google's Style guide"
+# This is a stylistic thing - up to you
 names_that_are_unreasonably_long_are_not_a_good_idea <- "correct"
+# putting things into inverted commas makes it a "text string"
+# longer variable names will get cut off in the system
+
 nouns_are_good <- TRUE
 TRUE <- 17
+
+
+# this objects (code doesnt run, becasue you can't assign a value to a logical operator)
+
 ekljre2jklwef023ijlefj93jkl23rj90f32k <- 1
 
 # 
@@ -85,30 +106,31 @@ ekljre2jklwef023ijlefj93jkl23rj90f32k <- 1
 # Assign the name of this workshop to a object with a good name.
 #
 # Solution: [Hint:       <- "Introduction to R"]
+Intro_R <- "Introduction to R"
 
 # Assign the name of video conferencing tool we are using to an object
 #
 # Solution: [Hint:      <- "Zoom"]
-
+Workshop_Platform <- "Zoom"
 
 # Which of these are valid object names: [Hint: Try them out]
 #
-#  min_height
-#  max.height
-#  _age
-#  .mass
-#  MaxLength
-#  min-length
-#  2widths
-#  celsius2kelvin
+min_height 
+max.height
+_age #doesn't like this one (can't start with an underscore?)
+.mass
+MaxLength
+min-length 
+2widths #doesn't like this one (can't start with a number)
+celsius2kelvin
 
 #
 # Topic: Displaying results
 #
 
 weight_lb <- 55    # doesn't print anything
-(weight_lb <- 55)  # but putting parenthesis () around and expression makes it display
-weight_lb          # and so does typing the name of the object
+(weight_lb <- 55)  # but putting parenthesis () around an expression makes it assign and also display
+weight_lb          # and just typing the name of the object will also display it
 
 # There are 2 and a bit pounds in a kilogram 
 2.20462 * weight_lb
@@ -120,19 +142,17 @@ weight_kg <- 2.20462 * weight_lb
 weight_kg
 
 # 
-# Exercise
-# 
 # 
 # What are the values after each statement in the following?
 # 
-# mass <- 47.5            # mass is: 
-# age  <- 122             # age is:
-# mass <- mass * 2.0      # mass is:
-# age  <- age - 20        # age is:
-# mass_index <- mass/age  # mass_index is: 
+# mass <- 47.5            # mass is: 47.5
+# age  <- 122             # age is: 122
+# mass <- mass * 2.0      # mass is: 95
+# age  <- age - 20        # age is: 102
+# mass_index <- mass/age  # mass_index is:  0.9313725
 #
 # How do we do we know if our answers are correct ? 
-# [Hint: <highlight> [ALT][ENTER]
+# [Hint: <highlight> [ALT][ENTER] (just run "mass" or "age" again to check what the currently stored value is)
 
 #
 # Topic: Comments
@@ -140,7 +160,7 @@ weight_kg
 
 # Comments (like this one) are usually helpful
 
-     # they can also be indented
+     # they can also be indented (and on the same line as a code)
 
 # They should be supportive (not redundant e.g. "this is a comment")
 
@@ -150,26 +170,28 @@ weight_kg
 #
 # Add explanatory comments to the following lines of code
 
-ft <- 3
-in <- ft * 12
-cms <- in * 2.54
-m = cms / 100
+ft <- 3           # assigning that length in feet = 3
+in <- ft * 12     # conversion from feet to inches
+cms <- in * 2.54  # 2.54 isthe conversion factor between inches and centimetres
+m = cms / 100     # assigning that metres is cms divided by 100
 
 #
 # Topic: Functions and Arguments
 #
-sqrt(2)
-sqrt(a)
-abs(-23.3)
+sqrt(2) #sqrt is the name of the function, 2 is the 'argument'
+a <- 64
+sqrt(a) # can't run this of course until you assign a number to a
+abs(-23.3) #absolue value
 round(3.14159)
 pi
 
 # Getting help about particular functions 
-?round
-args(round)
+?round #will tell you about the round funciton
+args(round) # will tell you about the arguments required to run this funciton
 
 round(3.14159, digits = 2)
 round(digits = 2, x = 3.14159)
+# you can't just flip the order around, unless you tell it which one is which with labels
 
 #
 # Exercise
@@ -178,6 +200,10 @@ round(digits = 2, x = 3.14159)
 #
 # Answer:
 
+?log10
+args(log10)
+log10(2)
+log10(456)
 
 
 #
