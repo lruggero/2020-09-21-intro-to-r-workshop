@@ -231,22 +231,26 @@ class(species)
 str(glengths)
 str(species)
 
-lengths <- c(glengths, 90)        # adding at the end
+lengths <- c(glengths, 90)        # adding at the end  Combine the existing lengths with 90 (it adds an extra number in the sequence)
 lengths <- c(30, glengths)        # adding at the start
 lengths
 
 # note all the elements have to be the same type
-length_species <- c(4.5, "ecoli")
+length_species <- c(4.5, "ecoli") # lets see what happens if we try to combine  a number and a word in one vector
 length_species
+
+# this doesn't work - R automatically converts the number 4.5 into a "textual representation". So it's not longer the number 4.5, it's a text entry.
 
 # This automatic conversion is called 'coercion' or 'casting' ..
 
-# and there are other types as well ...
+# and there are other types (of vectors) as well ...
+#first lets create some objects
 sqrt_of_minus_one <- 1i
 true_or_false_value <- TRUE
-decimal_number = 54.0
+decimal_number = 54.0  # Most of the tie you can use the  = sign but occassionally it doesn't work and you need to use the proper assignment sign
 whole_number = -54L
 
+# now run the vectors
 
 class(sqrt_of_minus_one)
 class(true_or_false_value)
@@ -265,15 +269,27 @@ class(decimal_number)
 # eg:
 #
 #   thing <- c("some characters", 3.141, 100, TRUE)
-#   thing
-#   class(thing)
+thing <- c("some characters", 3.141, 100, TRUE)
+#   thing - this tells us that's its converted all of these into character strings because everything is now in inverted commas
+#   class(thing) - running this tells us that it has made it a character string - if you were unsure what type of string it was
 #
 # What will happen in each of these examples?
 #
 #   num_char <- c(1, 2, 3, "a")
+num_char <- c(1, 2, 3, "a")
+num_char # when I run this then it tells me that it's made them all characters
+class(num_char) # confirms that it's converted to character string
+
+#Ctrl SHift C - it gets rid of the comment symbol
+
 #   num_logical <- c(1, 2, 3, TRUE)
+
 #   char_logical <- c("a", "b", "c", TRUE)
+
 #   tricky <- c(1, 2, 3, "4")
+tricky <- c(1, 2, 3, "4")
+tricky 
+
 #
 # [Hint: use class() to check the data type of your objects]
 #
@@ -295,28 +311,32 @@ class(decimal_number)
 # Presented by: Evan Matthews
 
 animals <- c("mouse", "rat", "dog", "cat")
-animals[2]
-animals[c(3, 2)]
+animals
+animals[2] # says just tell me the second one in the vector - must use sq brackets
+animals[c(3, 2)] # says just tell me the third then the second one in the vector 
 
 more_animals <- animals[c(1, 2, 3, 2, 1, 4)]
 more_animals
 
 # Conditional subsetting
 weight_g <- c(21,   34,    39,   54,   55)
-weight_g[   c(TRUE, FALSE, TRUE, TRUE, FALSE)]
+weight_g[   c(TRUE, FALSE, TRUE, TRUE, FALSE)] # instead of giving it numbers, I can tell it whether I want each of those elements or not
 
-weight_g > 50
+weight_g > 50 #I'm asking is weight greater thatn 50 for al the values in the vector? (it will tell me [1] FALSE FALSE FALSE  TRUE  TRUE)
 weight_g[weight_g > 50]
 
-weight_g[weight_g < 30 | weight_g > 50]
+weight_g[weight_g < 30 | weight_g > 50] # vertical bar = "OR" function # show me all the values that are less than 30 OR more than 50
 
-weight_g[weight_g >= 30 & weight_g == 21]
+weight_g[weight_g >= 30 & weight_g == 21] # show me al the vvalued which are less than or equal to 30 AND equal to 21
+
+
 
 animals <- c("mouse", "rat", "dog", "cat")
 animals[animals == "cat" | animals == "rat"] # returns both rat and cat
 
-animals %in% c("rat", "cat", "dog", "duck", "goat")
-animals[animals %in% c("rat", "cat", "dog", "duck", "goat")]
+animals %in% c("rat", "cat", "dog", "duck", "goat") #Check if the thing I'm interested in (animals) is in this current set?
+animals[animals %in% c("rat", "cat", "dog", "duck", "goat")] #in this animal array, give me all ones that are in this subset
+
 
 # Challenge
 #
@@ -327,19 +347,33 @@ animals[animals %in% c("rat", "cat", "dog", "duck", "goat")]
 # returns TRUE?
 #
 # Answer:
+# because they are character strings "chars" - the comparison operator > < etc means alphabetically and fo does come after fi alphabetically
+
+"z" > "a"
+"z" > "A" # in other languages the case can cause different answers. But R will evaluate regardless of case
+
+
 
 
 # Topic: Missing data (NA - Not Available)
 
-heights <- c(2, 4, 4, NA, 6)
-mean(heights)
+heights <- c(2, 4, 4, NA, 6) #denote missing data with NA - R doesn't care at this point
+#but if you try to run functions with a NA, it can cause problems
+
+mean(heights) # will return "NA" - this is the conservative answer because you can't average thigns when the NA could be anything!
 max(heights)
-mean(heights, na.rm = TRUE)
+mean(heights, na.rm = TRUE) #add an extra argument to say that you want to means, but "remove the NA values"
 max(heights, na.rm = TRUE)
 
-heights[!is.na(heights)]
-na.omit(heights)
+is.na(heights) # show me - is there an NA in here? ("is.na" checks the argument for NAs) - FALSE FALSE FALSE  TRUE FALSE
+!is.na(heights) # show me which ones are values in here (no NAs) - TRUE  TRUE  TRUE FALSE  TRUE
+#these True values now correspond to which values you want to keep
+
+heights[!is.na(heights)] # use that thing we just figured out to select out the interger values only - give me all the values in the heights vector which are not NAs - 2 4 4 6
+
+na.omit(heights) # loost the plot on what this was
 heights[complete.cases(heights)]
+heights
 
 #
 # Exercise (extended)
@@ -349,12 +383,25 @@ heights[complete.cases(heights)]
 # with the NAs removed.
 # 
 #   heights <- c(63, 69, 60, 65, NA, 68, 61, 70, 61, 59, 64, 69, 63, 63, NA, 72, 65, 64, 70, 63, 65)
+
+heights <- c(63, 69, 60, 65, NA, 68, 61, 70, 61, 59, 64, 69, 63, 63, NA, 72, 65, 64, 70, 63, 65)
+!is.na(heights) # show me which ones are values in here (no NAs) 
+na.omit(heights)
+
+#returned this: 63 69 60 65 68 61 70 61 59 64 69 63 63 72 65 64 70 63 65
+
 #
 # Solution
 
 # Use the function median() to calculate the median of the heights vector.
 #
 # Solution
+
+median(na.omit(heights))
+#OR
+median(heights,na.rm = TRUE)
+# we have to omit the NAs to calculate this, then it will run the medians
+
 
 # Use R to figure out how many people in the set are taller than 67 inches.
 #
