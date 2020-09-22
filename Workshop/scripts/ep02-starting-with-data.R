@@ -249,6 +249,14 @@ as.numeric(as.character(year))
 
 
 # so does our survey data have any factors
+#we can tell by looking at the structure
+str(surveys)
+#yes, there are plenty of factors (categ vars): genus, species, sex
+
+
+#R will automatcally import things that look like factors as factors - sometimes you will need to go in and fix these
+#there is also an option to supress this conversion when you import a csv
+#search 'strings become factors'
 
 
 
@@ -258,24 +266,63 @@ as.numeric(as.character(year))
 #
 
 # R has a whole library for dealing with dates ...
+library(lubridate) #tells my R studio I want the functionality that will come from running this package
+#date: 7-16-1977 (into this format)
 
+my_date <- ymd("2015-01-01")
+my_date
+class(my_date) #it has learnt this as a date!
 
 
 # R can concatenated things together using paste()
+#which is good because our dates are entered into days, months and years at the moment
 
-
-# 'sep' indicates the character to use to separate each component
+paste("abc", "123")   #gives back:  "abc 123" - with a seperator in between to show you there are discrete things
+paste("abc", "123", sep = "+")  # but you can replace the seperator of a space with something else
+paste("2015", "01", "26", sep = "-") # returns  "2015-01-26"
+ymd(paste("2015", "01", "26", sep = "-")) # this LOOKS identical, but it's no longer a character string but a date format
+class(my_date)
 
 
 # paste() also works for entire columns
+surveys$year  # this is another way of selecting a column (with the $ sign)
+paste(surveys$year, surveys$month, surveys$day, sep = "-") #this combines the columns to make dates, but they are still characters at this point
 
+ymd(paste(surveys$year, surveys$month, surveys$day, sep = "-")) # this has converted it to dates, but it's very long!
 
-# let's save the dates in a new column of our dataframe surveys$date 
+# let's save the dates in a new column of our dataframe surveys$date
+#we can save it into the dataframe in a new column - bc the column you label here doesn't exist, it creastes it
+surveys$date <- ymd(paste(surveys$year, 
+                          surveys$month, 
+                          surveys$day, sep = "-"))
+
+# now you can perform operations with the dates eg subtract them etc
+ 
+
 
 
 # and ask summary() to summarise 
+summary(surveys)  # now you can see in the summary that it summarises the new column as well
+
 
 
 # but what about the "Warning: 129 failed to parse"
+summary(surveys$date)  #lets look
+# it tells are there are 129 NAs
+# we need to go looking for them to see what needs to be fixed
+
+is.na(surveys$date)  #if we printes all the cells we would find eht odd "TRUE" although we can't see at first glance when we do this and get a preview
+#lets convert is to a variable to find them
+missing_date <- surveys[is.na(surveys$date), "date"]
+missing_date  #now it's just showing me the NAs and not 'reading' the other cells that have dates in them
+missing_date <- surveys[is.na(surveys$date), c("year", "month", "day", "record_id")] 
+#lets reprogram missing_date so we can see what is in those origianl cells, that it won't convert to a date
+#adding the record no means you can see where it's coming from in the spreadsheet
+#now it's  showing me the NAs and what is in their correspondin D, M Y cells
+missing_date
+#now you can see what they all have in common - they are all impossible dates, which don't have a "31st" (eg APril)
+#then you would have to decide how to handle the data - you could use R to change all those 31sts to 30ths.
+
+
 
 
