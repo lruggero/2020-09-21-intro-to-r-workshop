@@ -117,24 +117,56 @@ surveys[,6] #you just leave out the row number to tell it to give you the whole 
 surveys[,2]
 
 # first column of the data frame (as a data frame)
+surveys[1] #with no comma, it requests a single column dataframe (spreadsheet)
+head(surveys[1]) # this says show me the first 6 entries in column one
+head(surveys[,1]) # this says give it to me again but as a vector
+head(surveys[1,]) # this says show me the first 6 entries in row one, as a vectpr
 
 
 # first row (as a data frame)
 surveys[1,]
 
 # first three elements in the 7th column (as a vector)
+surveys[1:3,7]
+#this gives me 2 Ms - there are two males and an NA so this is correct
+
+
 
 
 # the 3rd row of the data frame (as a data.frame)
+surveys[3,]
 
 
-# equivalent to head(metadata)
+# equivalent to head(surveys)
+head(surveys)
+# the manual way of doing this:
+surveys[1:6,] #give me rows 1-6 and no specifying any particular (therefore all) columns
 
 
 # looking at the 1:6 more closely
+# this is a shorthand for a range (IE 1:6 in R = 1-6)
+#what it actually does is give you a sequence within tha range
+1:6
+1:12  # =  1  2  3  4  5  6  7  8  9 10 11 12
+567:569 # = 567 568 569
 
+surveys[ c(2,4,6),]
+# this gives you (a combination of ) rows 2,4 and 6 of the data
+
+surveys[1:6,3]
+# this gives me
+
+#COPIED FROM SCRATCHAD:
+  # looking at the 1:6 more closely
+  1:6 # this represents the sequence of numbers between 1 to 6 (inclusive) 
+5:10 # sequence of numbers 5 to 10 (inclusive)
+surveys[ c(1,2,3,4, 5,6), ] # returns rows 1 to 6 inclusive
+surveys[ c(2, 4, 6), ] # returns rows 2, 4 and 6
 
 # we also use other objects to specify the range
+rows <- 6
+surveys[1:6, 3]
+surveys[1:rows, 3] # returns same as above line as expected
 
 
 
@@ -145,33 +177,80 @@ surveys[1,]
 #
 # i.e., print just last 6 rows of the surveys dataframe
 #
+#######################
+Had a lot of trouble udnerstanding this section
 # Solution:
+surveys[34781:34786, ]
+#this has chosen them manually
+#more elegant way of doing it?
+nrow(surveys) #this tells us how may rows there are in the wholw dataset
+surveys[(nrow(surveys)-6):nrow(surveys), ]
+#you can use code to manipulate where it runs the code to and from
+
+?nrow #tells us the number of rows
 
 
 
 # We can omit (leave out) columns using '-'
+surveys[-1] #this means run it without column 1
+head(surveys[-1:-3]) #this means run it without columns 1-3
+head(surveys[-3:-5]) #this means run it without columns 3-5
+head(surveys[-(3:5)]) #this means run it without columns 3-5 BUT APPLIES THE MINUS FORM THE OUTSIDE SO YOU DON'T NEED TO TYPE IT MULTIPLE TIMES
+head(surveys[c(-3,-5,-8)]) #this means run it without columns 3, 5 and 8
 
 
 
-# column "names" can be used in place of the column numbers
-
+  # column "names" can be used in place of the column numbers
+#especially since your column numbers might change if you move thigns around
+head(surveys["species"]) #this means run only the column named species
+head(surveys["month"])
 
 
 #
 # Topic: Factors (for categorical data)
 #
+gender <- factor(c("male", "male", "female"))
+# we've just reprogrammed gender to be a factor with 2 "levels" or options
+gender
+class(gender) #if we check - it is stroed as a factor
+levels(gender) #we can check what the levels are
+nlevels(gender) # we can check the no of levels
 
 
 # factors have an order
+# like responses on a likert scale
+# in some cases it doesn't make sense to say eg lvPPA is greater than svPPA
+temperature <- factor(c("hot", "cold", "hot", "warm"))
+temperature
+temperature[1] # it will tell you what the levels of the variables are but they are alphabetical
+levels(temperature)
+#to reorder them based on how we want to order them we need to tell it
+temperature <- factor(c("hot", "cold", "hot", "warm"), levels = c("cold", "warm", "hot"))
 
+levels(temperature)
+#now we can see that it has stored them in the order we've asked it to
 
 # Converting factors
+as.numeric(temperature)
+as.character(temperature)
 
 
 # can be tricky if the levels are numbers
+# ie if you have the years 1980, 1993, 1998, 2015
+#if you make this a factor (ie a categorical variable) you can't do calculations with it
+year <- factor(c(1990, 1983, 1977, 1998, 1990))
+year
+
+as.numeric(year)  # so first you need to change it to a number, then character, then number again to be able to do maths with the years ie 'how many years apart were they?'
+as.character(year) #what's this bit?
+as.numeric(as.character(year))
+
+
 
 
 # so does our survey data have any factors
+
+
 
 
 #
