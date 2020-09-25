@@ -110,6 +110,7 @@ ggplot(data = surveys_complete, mapping = aes(y = weight, x = species_id, colour
 
 
 #BOXPLOTS:
+#-----
 #good for when you have 1x discrete (categorical variable) and 1x continuous variable
 ggplot(data = surveys_complete, mapping =aes(x = species_id, y = weight))+
   geom_boxplot()
@@ -202,11 +203,11 @@ ggplot(data = surveys_complete, mapping =aes(x = species_id, y = weight))+
 ggplot(data = surveys_complete, mapping =aes(x = species_id, y = weight))+
   geom_jitter(alpha = 0.3, colour = surveys_complete$plot_id)+
   scale_y_log10()
-
+#-----
 
 
 #PLOTTING TIME SERIES DATA
-
+#-----
 #lets look at how many data points there are per year, for each genus
 
 yearly_counts <- surveys_complete %>% 
@@ -229,3 +230,158 @@ ggplot(data = yearly_counts, mapping = aes(x = year, y = n, group=genus))+
 
 ggplot(data = yearly_counts, mapping = aes(x = year, y = n, group=genus, colour = genus))+
   geom_line()
+
+#integrating the pipe operator into the above :)
+
+yearly_counts %>% 
+  ggplot(mapping = aes(x = year, y = n, colour = genus))+
+  geom_line()
+
+#the ggplot doesn't need a data argument becaus ehte data is being piped in from above in the code
+
+#Then to create it as an object and store it:
+  yearly_counts_graph <-surveys_complete %>% 
+  count(year, genus) %>% 
+  ggplot(mapping = aes(x = year, y = n, colour = genus))+
+  geom_line()
+
+#The geom needs to be added as a "+" not a pipe - because you are adding an extra layer
+  #-----  
+
+  
+####### FACETING - making a panel of graphs
+  #-----
+ggplot(data = yearly_counts, mapping = aes(x = year, y = n))  +
+  geom_line() +
+  facet_wrap(facets = vars(genus))
+
+#OR
+
+ggplot(data = yearly_counts, mapping = aes(x = year, y = n))  +
+  geom_line() +
+  facet_wrap(~genus)
+
+#COOL - this looks like a graph you would see in a publication
+#now lets see how the data would vary by sex for each of these facets
+#we can't use the current data, because the yearly_coutns doesn't have sex in it
+
+
+yearly_sex_counts <- surveys_complete %>% 
+  count(year, genus, sex)
+
+#now lets pipe that into a plot function
+yearly_sex_counts %>% 
+ggplot(mapping = aes(x = year, y = n, colour = sex))  +
+  geom_line() +
+  facet_wrap(~genus)
+
+#we can also try changing the no of columns or rows it displays as - in case this makes it easier to display or publish 
+yearly_sex_counts %>% 
+  ggplot(mapping = aes(x = year, y = n, colour = sex))  +
+  geom_line() +
+  facet_wrap(~genus, ncol = 4)  
+
+#we can also facet by 2 variables  
+yearly_sex_counts %>% 
+  ggplot(mapping = aes(x = year, y = n, colour = sex))  +
+  geom_line() +
+  facet_grid(rows = vars(sex), cols = vars(genus)) 
+#so now the whole fact is organised by every column is a genus and every row is a sex  
+
+#lets modify it so it only facets by only rows:
+yearly_sex_counts %>% 
+  ggplot(mapping = aes(x = year, y = n, colour = sex))  +
+  geom_line() +
+  facet_grid(rows = vars(genus)) 
+
+###CHALLENGE 9
+#lets modify it so it only facets by only columns:
+yearly_sex_counts %>% 
+  ggplot(mapping = aes(x = year, y = n, colour = sex))  +
+  geom_line() +
+  facet_grid(cols = vars(genus)) 
+#-----
+
+
+###USING THEMES TO CUSTOMISE GRAPHS
+#-----
+#the graphs get weird gaps, labels need formatting, the grey background is ugly, font size needs to change, margins etc, etc
+#if you can think of it, it is customisable
+
+ggplot(data = yearly_sex_counts, mapping = aes(x = year, y = n, colour = sex))+
+  geom_line()+
+  facet_wrap(~genus)+
+  theme_bw()
+
+#There are lots of these: theme_void (build up from nothing)
+
+
+###Challenge 10
+###Put together what you’ve learned to create a plot that depicts:
+#how the average weight of each species changes through the years.
+####Hint: need to do a group_by() and summarize() to get the data before plotting
+
+#if you hadn't already cleaned your data, you need to remove the NAs before plotting (or pip that instruction in)
+
+yearly_weight <- surveys_complete %>% 
+  group_by(year, species_id) %>% 
+  summarise(mean_weight = mean(weight))
+
+#OR
+yearly_weight <- surveys_complete %>% 
+  group_by(year, species_id) %>% 
+  summarise(mean_weight = mean(weight, na.rm = TRUE))
+
+#now we have created the data set and need to plot
+
+yearly_weight %>% 
+  ggplot(mapping = aes(x = year, y = mean_weight, colour = species_id))+
+  geom_line()+
+  theme_bw()
+
+#what if we now want to facet it to have one plot per species?
+
+yearly_sex_counts %>% 
+  ggplot(mapping = aes(x = year, y = n, color = sex)) +
+  geom_line() +
+  facet_wrap(~genus) + 
+  labs(title = "Observed genera through time", 
+       x = "Year of observation", 
+       y = "Number of individuals") +
+  theme_bw() +
+  theme(text = element_text(size = 16),
+        axis.text.x = element_text(colour = "grey20",
+                                   size = 12,
+                                   angle = 90,
+                                   hjust = 0.5,
+                                   vjust = 0.5))
+
+
+Grey_plot_i_like <-   theme(text = element_text(size = 16),
+        axis.text.x = element_text(color = "grey20", 
+                                   size = 12, 
+                                   angle = 90, 
+                                   hjust = 0.5, 
+                                   vjust=.5),
+        axis.text.y = element_text(color = "grey20",
+                                   size = 12),
+        strip.text = element_text(face = "italic"))
+
+
+#-----
+
+
+
+#EXPORTING A PLOT:
+#-----
+#the export button is quite low quality eg for twitter
+#do export for publicaiton you need to export using code
+#you can change the file type, dimensions and dpi
+
+ggsave("figures/leannes_plot.png", width = 15, height = 10)
+
+#you can tell it the unit specifically (mm, cm, inches), otherwise it will take defaults from your system
+#would need to research this a bit more
+
+
+#-----
